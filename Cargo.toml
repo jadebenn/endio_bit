@@ -1,13 +1,16 @@
 [package]
 name = "endio_bit"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["lcdr"]
-edition = "2018"
+edition = "2024"
 description = "Bit-level reading and writing, modeled after std::io::{BufReader, BufWriter}."
 keywords = ["binary", "bit", "bitstream", "io"]
 categories = ["encoding", "parsing"]
 readme = "README.md"
 license = "AGPL-3.0-or-later"
-repository = "https://bitbucket.org/lcdr/endio_bit/"
+repository = "https://github.com/jadebenn/endio_bit/"
 
 [dependencies]
+
+[lints.clippy]
+pedantic = "warn"
