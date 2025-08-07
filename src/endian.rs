@@ -1,8 +1,6 @@
-/**
-    Specifies the bit endianness of a `BitReader` or `BitWriter`.
-
-    You can't implement this trait, it only exists as a trait bound.
-*/
+/// Specifies the bit endianness of a `BitReader` or `BitWriter`.
+///
+/// You can't implement this trait, it only exists as a trait bound.
 pub trait BitEndianness: private::Sealed {
     /// Shifts towards the most significant bit.
     fn shift_msb(val: u8, by: u8) -> u8;
