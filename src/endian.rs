@@ -16,23 +16,29 @@ pub struct BigEndian;
 pub struct LittleEndian;
 
 impl BitEndianness for BigEndian {
+    #[inline]
     fn shift_msb(val: u8, by: u8) -> u8 {
         val << by
     }
+    #[inline]
     fn shift_lsb(val: u8, by: u8) -> u8 {
         val >> by
     }
+    #[inline]
     fn align_right(val: u8, _count: u8) -> u8 {
         val
     }
 }
 impl BitEndianness for LittleEndian {
+    #[inline]
     fn shift_msb(val: u8, by: u8) -> u8 {
         val >> by
     }
+    #[inline]
     fn shift_lsb(val: u8, by: u8) -> u8 {
         val << by
     }
+    #[inline]
     fn align_right(val: u8, count: u8) -> u8 {
         Self::shift_msb(val, 8 - count)
     }
