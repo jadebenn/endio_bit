@@ -19,9 +19,11 @@ pub type LEBitWriter<W> = BitWriter<LE, W>;
 pub struct IntoInnerError<W>(W, std::io::Error);
 
 impl<W> IntoInnerError<W> {
+    #[inline]
     pub fn error(&self) -> &std::io::Error {
         &self.1
     }
+    #[inline]
     pub fn into_inner(self) -> W {
         self.0
     }
@@ -68,11 +70,13 @@ impl<E: BitEndianness, W: Write> BitWriter<E, W> {
     /// ```
     ///
     /// [`Write`]: https://doc.rust-lang.org/std/io/trait.Write.html
+    #[inline]
     pub fn new(inner: W) -> Self {
         Self::with_capacity(16, inner)
     }
 
     /// Creates a new `BitWriter` with an explicitly specified capacity for the buffer used in the `Write` implementation.
+    #[inline]
     pub fn with_capacity(capacity: usize, inner: W) -> Self {
         Self {
             inner: Some(inner),
@@ -90,6 +94,7 @@ impl<E: BitEndianness, W: Write> BitWriter<E, W> {
     }
 
     /// Aligns to byte boundary, skipping a partial byte if the `BitWriter` was not aligned.
+    #[inline]
     pub fn align(&mut self) -> Res<()> {
         if !self.is_aligned() {
             self.flush_buffer()?;
@@ -106,6 +111,7 @@ impl<E: BitEndianness, W: Write> BitWriter<E, W> {
     /// # let inner = writer.get_ref();
     /// # inner.clear();
     /// ```
+    #[inline]
     pub fn get_ref(&self) -> &W {
         self.inner.as_ref().unwrap()
     }
@@ -115,6 +121,7 @@ impl<E: BitEndianness, W: Write> BitWriter<E, W> {
     /// Mutable operations on the underlying writer will corrupt this `BitWriter` if it is not aligned, so the reference is only returned if the `BitWriter` is aligned.
     ///
     /// Panics if the `BitWriter` is not aligned.
+    #[inline]
     pub fn get_mut(&mut self) -> &mut W {
         assert!(self.is_aligned(), "BitWriter is not aligned");
         self.inner.as_mut().unwrap()
@@ -123,6 +130,7 @@ impl<E: BitEndianness, W: Write> BitWriter<E, W> {
     /// Gets a mutable reference to the underlying writer.
     ///
     /// Use with care: Any writing/seeking/etc operation on the underlying writer will corrupt this `BitWriter` if it is not aligned.
+    #[inline]
     pub unsafe fn get_mut_unchecked(&mut self) -> &mut W {
         self.inner.as_mut().unwrap()
     }
@@ -130,6 +138,7 @@ impl<E: BitEndianness, W: Write> BitWriter<E, W> {
     /// Unwraps this `BitWriter`, returning the underlying writer.
     ///
     /// The buffer for partial writes will be flushed before returning the writer. If an error occurs during the flushing it will be returned.
+    #[inline]
     pub fn into_inner(mut self) -> Result<W, IntoInnerError<Self>> {
         match self.align() {
             Ok(()) => Ok(self.inner.take().unwrap()),
@@ -253,6 +262,7 @@ impl<E: BitEndianness, W: Write> Write for BitWriter<E, W> {
 
 /// Flushes the buffer for unaligned writes before the `BitWriter` is dropped.
 impl<E: BitEndianness, W: Write> Drop for BitWriter<E, W> {
+    #[inline]
     fn drop(&mut self) {
         let _ = self.align();
     }

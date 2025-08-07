@@ -43,6 +43,7 @@ impl<E: BitEndianness, R: Read> BitReader<E, R> {
     /// ```
     ///
     /// [`Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
+    #[inline]
     pub fn new(inner: R) -> Self {
         Self {
             inner,
@@ -59,6 +60,7 @@ impl<E: BitEndianness, R: Read> BitReader<E, R> {
     }
 
     /// Aligns to byte boundary, discarding a partial byte if the `BitReader` was not aligned.
+    #[inline]
     pub fn align(&mut self) {
         self.bit_offset = 0;
         self.bit_buffer = 0;
@@ -74,6 +76,7 @@ impl<E: BitEndianness, R: Read> BitReader<E, R> {
     /// # let mut buf = [0; 1];
     /// # inner.read(&mut buf).unwrap();
     /// ```
+    #[inline]
     pub fn get_ref(&self) -> &R {
         &self.inner
     }
@@ -83,6 +86,7 @@ impl<E: BitEndianness, R: Read> BitReader<E, R> {
     /// Mutable operations on the underlying reader will corrupt this `BitReader` if it is not aligned, so the reference is only returned if the `BitReader` is aligned.
     ///
     /// Panics if the `BitReader` is not aligned.
+    #[inline]
     pub fn get_mut(&mut self) -> &mut R {
         assert!(self.is_aligned(), "BitReader is not aligned");
         &mut self.inner
@@ -91,6 +95,7 @@ impl<E: BitEndianness, R: Read> BitReader<E, R> {
     /// Gets a mutable reference to the underlying reader.
     ///
     /// Use with care: Any reading/seeking/etc operation on the underlying reader will corrupt this `BitReader` if it is not aligned.
+    #[inline]
     pub unsafe fn get_mut_unchecked(&mut self) -> &mut R {
         &mut self.inner
     }
@@ -98,6 +103,7 @@ impl<E: BitEndianness, R: Read> BitReader<E, R> {
     /// Unwraps this `BitReader`, returning the underlying reader.
     ///
     /// Note that any partially read byte is lost.
+    #[inline]
     pub fn into_inner(self) -> R {
         self.inner
     }
